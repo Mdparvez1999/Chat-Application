@@ -29,8 +29,20 @@ app.use(CORS({
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 }));
 
-// helmet
+// helmet with default configuration
 app.use(helmet());
+
+// helmet with CSP configuration
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        connectSrc: ["'self'"],
+        imgSrc: ["'self'", "data:", "https://avatar.iran.liara.run"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+    }
+}))
 
 // middlewares
 app.use(cookieParser());

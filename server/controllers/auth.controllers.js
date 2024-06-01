@@ -17,9 +17,9 @@ export const signUp = tryCatch(async (req, res, next) => {
     };
 
     if (gender === "male") {
-        profilePic = `https://avatar.iran.liara.run/public/boy?username=${userName}`
+        profilePic = `https://avatar.iran.liara.run/public/boy?username=${fullName}`
     } else {
-        profilePic = `https://avatar.iran.liara.run/public/girl?username=${userName}`
+        profilePic = `https://avatar.iran.liara.run/public/girl?username=${fullName}`
     };
 
     const hashedPassword = await hashPassword(password);
