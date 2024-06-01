@@ -1,39 +1,81 @@
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import useLogin from "../../hooks/useLogin";
+
+/**
+ * Login component
+ *
+ * This component renders the login form and handles the login functionality
+ * using the useLogin hook.
+ */
 const Login = () => {
+    // Initialize state for login data
+    const [loginData, setLoginData] = useState({
+        userName: "",
+        password: ""
+    });
+
+    // Get the login function and loading state from the useLogin hook
+    const { loading, login } = useLogin();
+
+    /**
+     * Handle form submission
+     *
+     * This function is called when the login form is submitted.
+     * It prevents the default form submission behavior, calls the login function
+     * with the login data, and displays an error toast if there is an error.
+     *
+     * @param {Event} e - The form submission event
+     */
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await login(loginData);
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
+
     return (
-        <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
-            <div className="w-full p-6 bg-white-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border-2 border-[#d9d9d9]">
+        // Render the login form
+        <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
+            <div className="max-w-md p-4 sm:p-6 bg-white border border-gray-300 rounded-lg shadow-lg w-80">
                 <h1 className="text-2xl text-center font-semibold text-black pb-4">
                     Login
                     <span className="pl-4 text-blue-600">
                         chat-app
                     </span>
                 </h1>
-                <form action="">
-                    <div className="mb-6 mt-2">
-                        <label className="input input-bordered flex items-center gap-2 bg-white text-black border-1 border-black">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70 "><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
-                            <input type="text" className="grow" placeholder="Username" />
-                        </label>
+                <form onSubmit={handleSubmit}>
+                    {/* Render the userName input field */}
+                    <div className="mb-4 sm:mb-6 mt-2">
+                        <input type="text" className="input input-bordered w-full bg-white text-black border border-gray-300 rounded-md"
+                            placeholder="UserName" name="userName" onChange={(e) => setLoginData({ ...loginData, userName: e.target.value })} />
                     </div>
+                    {/* Render the password input field */}
                     <div>
-                        <label className="input input-bordered flex items-center gap-2 bg-white text-black border-1 border-black">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z" clipRule="evenodd" /></svg>
-                            <input type="password" className="grow" placeholder="password" />
-                        </label>
+                        <input type="password" className="input input-bordered w-full bg-white text-black border border-gray-300 rounded-md"
+                            placeholder="password" name="password" onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
                     </div>
-                    <a className="text-sm text-black mt-3 cursor-pointer inline-block">
+                    {/* Render the signup link */}
+                    <Link to="/signup" className="text-sm text-black mt-3 cursor-pointer inline-block">
                         {"don't have an account ?"}
                         <span className="hover:underline hover:text-blue-800 pl-1">
                             Register
                         </span>
-                    </a>
+                    </Link>
+                    {/* Render the login button */}
                     <div>
-                        <button className="btn btn-block btn-primary btn-outline btn-sm mt-5 text-[1.1rem] !text-black hover:!text-white">Login</button>
+                        <button className="btn btn-block btn-primary btn-outline btn-md mt-4 pb-1 sm:mt-5 text-[1.25rem] !text-black hover:!text-white"
+                            type="submit">
+                            {loading ? <span className="loading loading-spinner loading-lg "></span> : "Login"}
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
-    )
+    );
 }
 
-export default Login
+export default Login;

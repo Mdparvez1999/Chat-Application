@@ -1,102 +1,98 @@
+import AppError from "../custom/AppError.js";
+import tryCatch from "../custom/tryCatch.js";
 import { User } from "../models/user.model.js";
 import { comparePassword, hashPassword } from "../utils/authHelpers.js";
 import { generateToken } from "../utils/genToken.js";
 
 // signup controller
-export const signUp = async (req, res, next) => {
-    try {
-        let { fullName, userName, password, gender, profilePic } = req.body;
+export const signUp = tryCatch(async (req, res, next) => {
+    let { fullName, userName, password, gender, profilePic } = req.body;
 
-        const existingUserName = await User.findOne({ userName });
+    const existingUserName = await User.findOne({ userName });
 
-        if (existingUserName) {
-            return res.status(400).json({
-                error: "username already exists"
-            })
-        };
+    if (existingUserName) {
+        const msg = "username already exists";
+        const err = new AppError(msg, 400);
+        return next(err);
+    };
 
-        if (gender === "male") {
-            profilePic = `https://avatar.iran.liara.run/public/boy?username=${userName}`
-        } else {
-            profilePic = `https://avatar.iran.liara.run/public/girl?username=${userName}`
-        };
+    if (gender === "male") {
+        profilePic = `https://avatar.iran.liara.run/public/boy?username=${userName}`
+    } else {
+        profilePic = `https://avatar.iran.liara.run/public/girl?username=${userName}`
+    };
 
-        const hashedPassword = await hashPassword(password);
+    const hashedPassword = await hashPassword(password);
 
-        const newUser = await User.create({
-            fullName,
-            userName,
-            password: hashedPassword,
-            gender,
-            profilePic
-        });
+    if (!hashedPassword) {
+        const msg = "try again later";
+        const err = new AppError(msg, 500);
+        return next(err);
+    };
 
-        // generate token and set cookie 
-        generateToken(newUser._id, res);
+    const newUser = await User.create({
+        fullName,
+        userName,
+        password: hashedPassword,
+        gender,
+        profilePic
+    });
 
-        return res.status(201).json({
-            message: "registration successful",
-            user: {
-                _id: newUser._id,
-                fullName: newUser.fullName,
-                userName: newUser.userName,
-                gender: newUser.gender,
-                profilePic: newUser.profilePic,
-            }
-        });
-    } catch (error) {
-        console.log("error in signup controller : ", error);
-    }
-};
+    // generate token and set cookie 
+    await generateToken(newUser._id, res);
+
+    return res.status(201).json({
+        message: "registration successful",
+        user: {
+            _id: newUser._id,
+            fullName: newUser.fullName,
+            userName: newUser.userName,
+            gender: newUser.gender,
+            profilePic: newUser.profilePic,
+        }
+    });
+})
 
 // login controller
-export const logIn = async (req, res, next) => {
-    try {
-        const { userName, password } = req.body;
+export const logIn = tryCatch(async (req, res, next) => {
 
-        const existingUser = await User.findOne({ userName });
+    const { userName, password } = req.body;
 
-        if (!existingUser) {
-            return res.status(200).json({
-                error: "user not found"
-            })
-        };
+    const existingUser = await User.findOne({ userName });
 
-        const correctPassword = await comparePassword(password, existingUser.password);
+    if (!existingUser) {
+        const msg = "user not found";
+        const err = new AppError(msg, 404);
+        return next(err);
+    };
 
-        if (!correctPassword) {
-            return res.status(404).json({
-                error: "invalid username or password"
-            })
-        };
+    const correctPassword = await comparePassword(password, existingUser.password);
 
-        // generate token and set cookie
-        generateToken(existingUser._id, res);
+    if (!correctPassword) {
+        const msg = "invalid username or password";
+        const err = new AppError(msg, 400);
+        return next(err);
+    };
 
-        return res.status(200).json({
-            message: "login successful",
-            user: {
-                _id: existingUser._id,
-                fullName: existingUser.fullName,
-                userName: existingUser.userName,
-                gender: existingUser.gender,
-                profilePic: existingUser.profilePic,
-            }
-        })
+    // generate token and set cookie
+    await generateToken(existingUser._id, res);
 
-    } catch (error) {
-        console.log("error in login : ", error);
-    }
-};
+    return res.status(200).json({
+        message: "login successful",
+        user: {
+            _id: existingUser._id,
+            fullName: existingUser.fullName,
+            userName: existingUser.userName,
+            gender: existingUser.gender,
+            profilePic: existingUser.profilePic,
+        }
+    })
+});
 
 // logout controller
-export const logOut = async (req, res, next) => {
-    try {
-        res.clearCookie("jwt");
-        return res.status(200).json({
-            message: "logout successful"
-        });
-    } catch (error) {
-        console.log("error in logout : ", error);
-    }
-};
+export const logOut = tryCatch(async (req, res, next) => {
+    res.clearCookie("jwt");
+    return res.status(200).json({
+        message: "logout successful"
+    });
+});

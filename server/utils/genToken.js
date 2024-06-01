@@ -1,14 +1,15 @@
 import jwt from "jsonwebtoken";
 
-export const generateToken = (userId, res) => {
+export const generateToken = async (userId, res) => {
     try {
-        const token = jwt.sign({ userId }, "usqsxD9nXb3UyrrbXlijNDYX1Vy1q/xtsYncryja1KA=", { expiresIn: '1d' });
+        const token = await jwt.sign({ userId }, "usqsxD9nXb3UyrrbXlijNDYX1Vy1q/xtsYncryja1KA=", { expiresIn: '1d' });
 
         res.cookie("jwt", token, {
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
-            sameSite: "strict",
-        })
+            secure: true,
+            sameSite: 'None'
+        });
     } catch (error) {
         console.log("error in generating token : ", error);
     }

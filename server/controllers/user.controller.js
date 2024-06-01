@@ -1,3 +1,4 @@
+import tryCatch from "../custom/tryCatch.js";
 import { User } from "../models/user.model.js";
 
 /*
@@ -11,27 +12,43 @@ import { User } from "../models/user.model.js";
 * This means that the find method will return an array of lean documents instead of an array of Mongoose documents
 * The lean documents will not have any of the methods or getters of the Mongoose documents, but they will still have all the data
 */
-export const getAllUsers = async (req, res, next) => {
-    try {
-        // get the id of the currently logged in user
-        const userId = req.user._id;
+export const getAllUsers = tryCatch(async (req, res, next) => {
+    // get the id of the currently logged in user
+    const userId = req.user._id;
 
-        // use the find method of the User model to get all users except the currently logged in user
-        const users = await User.find({ _id: { $ne: userId } }).select("-password").lean();
+    // use the find method of the User model to get all users except the currently logged in user
+    const users = await User.find({ _id: { $ne: userId } }).select("-password").lean();
 
-        // if no users are found, return an empty array
-        if (!users || users.length === 0) {
-            return res.status(404).json([])
-        };
+    // if no users are found, return an empty array
+    if (!users || users.length === 0) {
+        return res.status(200).json([])
+    };
 
-        // return a json response with a success message and the array of users
-        return res.status(200).json({
-            message: "successful",
-            users
-        });
-    } catch (error) {
-        // log any errors that occur
-        console.log("error in getting all users : ", error);
-    }
-};
+    // return a json response with a success message and the array of users
+    return res.status(200).json({
+        message: "successful",
+        users
+    });
+});
+
+export const getFilteredUsers = tryCatch(async (req, res, next) => {
+    const userId = req.user._id;
+
+    const search = req.query.search;
+
+    const filteredUsers = await User.find({
+        _id: { $ne: userId },
+        fullName: { $regex: search, $options: "i" }
+    }).select("-password").lean();
+
+    if (!filteredUsers || filteredUsers.length === 0) {
+        return res.status(200).json([])
+    };
+
+    return res.status(200).json({
+        message: "successful",
+        filteredUsers
+    });
+}
+)
 
