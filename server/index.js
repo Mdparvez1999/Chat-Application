@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import CORS from "cors";
 import helmet from "helmet";
 import compression from "compression";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import connectToDB from "./config/dbConfig.js";
 import authRoutes from "./routes/auth.routes.js"
@@ -36,6 +38,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
@@ -43,7 +49,7 @@ app.use("/api/users", userRoutes);
 
 // error handler
 app.use("*", (req, res, next) => {
-    return res.status(500).send("no route found");
+    return res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
 

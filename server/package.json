@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "build": "cd ../client && npm install && npm run build",
+    "start": "node server.js",
+    "start:prod": "npm run build && npm start"
   },
   "type": "module",
   "keywords": [],
