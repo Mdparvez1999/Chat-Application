@@ -16,7 +16,7 @@ export const SocketContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (currentUser) {
-            const socket = io("http://localhost:8000", {
+            const socket = io("https://chat-application-kp3g.onrender.com", {
                 query: {
                     userId: currentUser._id
                 },
