@@ -37,7 +37,7 @@ app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
-        connectSrc: ["'self'"],
+        connectSrc: ["'self'", "https://chat-application-kp3g.onrender.com"],
         imgSrc: ["'self'", "data:", "https://avatar.iran.liara.run"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
