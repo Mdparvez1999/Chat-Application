@@ -33,7 +33,7 @@ const useLogin = () => {
             const payLoad = { userName, password };
 
             // Make a POST request to the server to perform the login
-            const response = await fetch('http://localhost:8000/api/auth/login', {
+            const response = await fetch(`${import.meta.env.API_URL}/api/auth/login`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'content-type': 'application/json' },
