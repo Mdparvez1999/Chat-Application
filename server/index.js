@@ -14,7 +14,9 @@ import userRoutes from "./routes/user.routes.js"
 import errorHandler from "./middlewares/errorHandler.middleware.js";
 
 // env config
-dotEnv.config();
+dotEnv.config({
+    path: "./.env",
+});
 
 // app instance
 export const app = express();
@@ -37,7 +39,7 @@ app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
-        connectSrc: ["'self'", "https://chat-application-kp3g.onrender.com"],
+        connectSrc: ["'self'"],
         imgSrc: ["'self'", "data:", "https://avatar.iran.liara.run"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
@@ -67,3 +69,9 @@ app.use("*", (req, res, next) => {
 
 // global error handler
 app.use(errorHandler);
+
+
+// avatar.iran.liara.run / public / boy ? username = parvez % 201234 : 1 
+        
+        
+//        GET https://avatar.iran.liara.run/public/boy?username=parvez%201234 net::ERR_SSL_PROTOCOL_ERROR 200 (OK)

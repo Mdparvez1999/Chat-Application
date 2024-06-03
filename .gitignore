@@ -1,3 +1,49 @@
-# ignore node_modules folder
+# Ignore node_modules folders
 /server/node_modules/
 /client/node_modules/
+node_modules/
+
+# Ignore .env file
+.env
+
+# Logs
+/server/logs
+/client/logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build output
+/server/dist
+/client/dist
+dist
+dist-ssr
+
+# Local environment settings
+*.local
+.DS_Store
+
+# Editor directories and files
+/server/.vscode/
+/client/.vscode/
+.vscode/
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ignore coverage reports
+/server/coverage/
+/client/coverage/
+coverage/
+
+# Ignore dependency directories
+.pnp
+.pnp.js

@@ -16,7 +16,7 @@ export const SocketContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (currentUser) {
-            const socket = io("https://chat-application-kp3g.onrender.com", {
+            const socket = io("", {
                 query: {
                     userId: currentUser._id
                 },

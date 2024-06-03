@@ -1,36 +1,37 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
+import AppError from "../custom/AppError.js";
+import tryCatch from "../custom/tryCatch.js";
 
-export const auth = async (req, res, next) => {
-    try {
-        const token = req.cookies.jwt;
+export const auth = tryCatch(async (req, res, next) => {
+    const token = req.cookies.jwt;
 
-        if (!token) {
-            return res.status(401).json({
-                error: "Unauthorized-token not found"
-            })
-        }
+    if (!token) {
+        const msg = "Unauthorized-token not found";
+        const err = new AppError(msg, 401);
 
-        const verified = jwt.verify(token, 'usqsxD9nXb3UyrrbXlijNDYX1Vy1q/xtsYncryja1KA=');
-
-        if (!verified) {
-            return res.status(401).json({
-                error: "Unauthorized-token not verified"
-            })
-        };
-
-        const user = await User.findById(verified.userId).select("-password");
-
-        if (!user) {
-            return res.status(401).json({
-                error: "Unauthorized-user not found"
-            })
-        };
-
-        req.user = user;
-
-        next();
-    } catch (error) {
-        console.log("error in auth middleware : ", error);
+        return next(err);
     }
-};
+
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!verified) {
+        const msg = "Unauthorized-token not verified";
+        const err = new AppError(msg, 401);
+
+        return next(err);
+    };
+
+    const user = await User.findById(verified.userId).select("-password");
+
+    if (!user) {
+        const msg = "Unauthorized-user not found";
+        const err = new AppError(msg, 401);
+
+        return next(err);
+    };
+
+    req.user = user;
+
+    next();
+});
