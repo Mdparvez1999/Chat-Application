@@ -10,7 +10,7 @@ const useSendMessage = () => {
     const sendMessage = async (message) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:8000/api/message/send/${selectedConversation._id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/message/send/${selectedConversation._id}`, {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 credentials: 'include',

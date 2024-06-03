@@ -11,7 +11,7 @@ const useGetMessages = () => {
         const getMessages = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`http://localhost:8000/api/message/${selectedConversation._id}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/message/${selectedConversation._id}`, {
                     method: 'GET',
                     credentials: 'include',
                 });

@@ -41,7 +41,7 @@ const useSignup = () => {
             const payLoad = { fullName, userName, password, gender };
 
             // Make a POST request to the server to perform the signup
-            const response = await fetch("http://localhost:8000/api/auth/signup", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'content-type': 'application/json' },
