@@ -12,7 +12,7 @@ const useLogout = () => {
     const logOut = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+            const response = await fetch(`/api/auth/logout`, {
                 method: 'POST',
                 credentials: 'include', // Include this if you're dealing with cookies
             });
@@ -29,6 +29,7 @@ const useLogout = () => {
 
             toast.success(data.message)
         } catch (error) {
+            console.log(error);
             toast.error(error.message);
         } finally {
             setLoading(false);

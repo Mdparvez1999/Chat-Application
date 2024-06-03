@@ -7,7 +7,7 @@ const server = http.createServer(app);
 
 export const io = new Server(server, {
     cors: {
-        origin: ["https://chat-application-mdp.netlify.app"],
+        origin: ["http://localhost:3000"],
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
         allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true,

@@ -11,7 +11,7 @@ const useGetMessages = () => {
         const getMessages = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/message/${selectedConversation._id}`, {
+                const response = await fetch(`/api/message/${selectedConversation._id}`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -22,6 +22,7 @@ const useGetMessages = () => {
 
                 setMessages(data.messages || []);
             } catch (error) {
+                console.log(error);
                 toast.error(error.message);
             } finally {
                 setLoading(false)

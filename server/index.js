@@ -26,7 +26,7 @@ connectToDB()
 
 // cors
 app.use(CORS({
-    origin: "https://chat-application-mdp.netlify.app/",
+    origin: "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 }));
@@ -39,7 +39,7 @@ app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
-        connectSrc: ["'self'", "https://chat-application-mdp.netlify.app"],
+        connectSrc: ["'self'"],
         imgSrc: ["'self'", "data:", "https://avatar.iran.liara.run"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
@@ -54,24 +54,17 @@ app.use(compression());
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-app.use(express.static(path.join(__dirname, "../client/dist")));
 
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/users", userRoutes);
 
-// error handler
-app.use("*", (req, res, next) => {
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+app.get("*", (req, res, next) => {
     return res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
-
 // global error handler
 app.use(errorHandler);
-
-
-// avatar.iran.liara.run / public / boy ? username = parvez % 201234 : 1 
-        
-        
-//        GET https://avatar.iran.liara.run/public/boy?username=parvez%201234 net::ERR_SSL_PROTOCOL_ERROR 200 (OK)

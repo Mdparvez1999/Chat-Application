@@ -41,7 +41,7 @@ const useSignup = () => {
             const payLoad = { fullName, userName, password, gender };
 
             // Make a POST request to the server to perform the signup
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
+            const response = await fetch(`/api/auth/signup`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'content-type': 'application/json' },
@@ -69,6 +69,7 @@ const useSignup = () => {
             navigate("/");
         } catch (error) {
             // If there is an error, show an error toast message
+            console.log(error);
             toast.error(error.message)
         } finally {
             // Set the loading state to false to hide the loading indicator

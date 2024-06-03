@@ -10,7 +10,7 @@ const useGetConversations = () => {
     const getConversations = async () => {
       setLoading(true)
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users}`, {
+        const response = await fetch(`/api/users`, {
           method: "GET",
           credentials: "include",
         });
@@ -23,6 +23,7 @@ const useGetConversations = () => {
 
         setConversations(data.users);
       } catch (error) {
+        console.log(error);
         toast.error(error.message);
       } finally {
         setLoading(true)
