@@ -26,7 +26,7 @@ connectToDB()
 
 // cors
 app.use(CORS({
-    origin: "http://localhost:3000",
+    origin: "https://chat-application-mdp.netlify.app/",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 }));
@@ -39,7 +39,7 @@ app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
-        connectSrc: ["'self'", "https://chat-application-k76m.onrender.com"],
+        connectSrc: ["'self'", "https://chat-application-mdp.netlify.app/"],
         imgSrc: ["'self'", "data:", "https://avatar.iran.liara.run"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
