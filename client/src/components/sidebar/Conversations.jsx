@@ -7,7 +7,7 @@ const Conversations = () => {
     return (
         <>
             <div className="flex flex-col overflow-auto">
-                {conversations.map((conversation, index) => (
+                {conversations?.map((conversation, index) => (
                     <Conversation
                         key={conversation._id}
                         conversation={conversation}
